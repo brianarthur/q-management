@@ -1,0 +1,30 @@
+<?php
+  require('../db.php');
+  session_start();
+
+  // Make sure email and hash variables are set
+  if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])) {
+
+    $email = $mysqli->escape_string($_GET['email']);
+    $hash = $mysqli->escape_string($_GET['hash']);
+
+    //Select user with matching email, hash and active = 0
+    $result = $mysqli->query("SELECT * FROM user WHERE email='$email' AND hash='$hash' AND active='0'");
+
+    if ($result->num_rows == 0) {
+      $_SESSION['message'] = "Account has already been activated or the URL is invalid.";
+    }
+    else {
+      $_SESSION['message'] = "Your account has been activated!";
+
+      // Set user status to active
+      $mysqli->query("UPDATE user SET active='1' WHERE email='$email'") or die($mysqli->error);
+      $_SESSION['active'] = 1;
+    }
+    header("location: index.php");
+
+  }
+  else {
+    header("location: index.php");
+  }
+?>
