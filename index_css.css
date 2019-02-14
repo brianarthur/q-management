@@ -10,7 +10,7 @@ body {
   margin-bottom: 20px;
 }
 
-#content {
+#schedule {
   color: white !important;
 }
 
@@ -100,6 +100,7 @@ body {
   padding: 7px;
   margin: 7px;
   text-align: center !important;
+  max-height: 38px;
 }
 
 .block {
@@ -110,6 +111,7 @@ body {
   outline:none;
   box-shadow:0 0 10px #f7f2bb;
   border:5px solid #f7f2bb;
+  max-height: 50px;
 }
 
 

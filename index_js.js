@@ -36,7 +36,7 @@ var drake = dragula([
 		}, 600);
 	}, 100);
 */
-	getScheduleValues();
+	//getScheduleValues();
 })
 .on('drop', function(el, target) {
 	if (target) {
@@ -87,7 +87,7 @@ function getScheduleValues() {
 		values.push(dayValues);
 		dayValues = [];
 	}
-	console.log(values);	//ABLE TO SAVE THESE VALUES IN DATABASE
+	return values;	//ABLE TO SAVE THESE VALUES IN DATABASE
 }
 
 getScheduleValues();
@@ -113,4 +113,18 @@ $(window).click(function(el){
 		$selected.removeClass("glow");
 		$selected = null;
 	}
+});
+
+$('#save_schedule').click(function(){
+	var schedule = getScheduleValues();
+	$.ajax({
+		url: "save_schedule.php",
+		type: "POST",
+		data: {schedule : schedule},
+		success: function (data){
+			if (data.error) {
+				$('body').append(data.error.msg);
+			}
+		}
+	});
 });
