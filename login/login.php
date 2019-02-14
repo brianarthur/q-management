@@ -20,6 +20,10 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
       $_SESSION['last_name'] = $user['lastName'];
       $_SESSION['active'] = $user['active'];
       $_SESSION['logged_in'] = true;
+      $_SESSION['schedule'] = $user['schedule_id'];
+      $_SESSION['id'] = $user['id'];
+      $_SESSION['timeout'] = time();
+      $_SESSION['alert'] = "Successfully logged in.";
 
       header("location: index.php");
 
@@ -27,8 +31,6 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
     else {
       $_SESSION['message'] = "Incorrect username or password.";
     }
-
-
   }
 }
 else {

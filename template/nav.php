@@ -21,23 +21,27 @@
         <li class="nav-item active">
           <a class="nav-link" href="<?= $home; ?>">Home<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= $login.'index.php?signup=false'; ?>">Login (temp)</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= $login.'index.php?signup=true'; ?>">Sign Up (temp)</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= $login.'logout.php'; ?>">Logout (temp)</a>
-        </li>
-
       </ul>
-      <!--
-      <form class="form-inline mt-2 mt-md-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    -->
+      <ul class="navbar-nav navbar-right">
+        <?php
+          if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
+            echo '<li class="nav-item navbar-text mr-3">';
+              echo 'Hello, '.$_SESSION['first_name'];
+            echo '</li>';
+            echo '<li class="nav-item">';
+              echo '<a class="nav-link" href="'.$login.'logout.php">Logout</a>';
+            echo '</li>';
+          }
+          else {
+            echo '<li class="nav-item">';
+              echo '<a class="nav-link" href="'.$login.'index.php?signup=false">Login</a>';
+            echo '</li>';
+            echo '<li class="nav-item">';
+              echo '<a class="nav-link" href="'.$login.'index.php?signup=true">Sign Up</a>';
+            echo '</li>';
+          }
+        ?>
+      </ul>
     </div>
   </nav>
 </header>

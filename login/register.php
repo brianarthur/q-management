@@ -30,24 +30,40 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
       VALUES ('$first_name', '$last_name', '$email', '$password', '$hash')";
 
     if($mysqli->query($sql)) {
+      // get the id of newest user
+      $result = $mysqli->query("SELECT LAST_INSERT_ID();");
+      $result = $result->fetch_assoc();
+      $_SESSION['id'] = $result['LAST_INSERT_ID()'];
+
       // user is logged in
       $_SESSION['active'] = 0;
       $_SESSION['logged_in'] = true;
-      $_SESSION['message'] = "Confrimation sent to email '$email' (should make a page for this)";
+      $_SESSION['alert'] = "Confrimation email sent to '$email' (should make a page for this)";
+      $_SESSION['schedule'] = 0;
+      $_SESSION['timeout'] = time();
 
       // Send registration confirmation link
-      $to = $email;
-      $subject = 'Account Verification for q-management';
-      $message_body = '
+      // TODO need to verify how server will send emails
+      require('../mail.php');
+      $mail->setFrom('q-management@queensu.case', 'Q Management');
+      $mail->addAddress($email, $first_name.' '.$last_name);
+      $mail->Subject = 'Q-Management Sign Up';
+      $mail->Body = '
       Hello '.$first_name.',
 
-      Thank you for signing up for q-management!
+      Thank you for signing up for Q Management!
 
       Please use this link to activate your account:
 
-      http://localhost/q-management/login/verify.php?email='.$email.'&hash='.$hash;
+      http://localhost/q-management/login/verify.php?email='.$email.'&hash='.$hash.'
 
-      mail($to, $subject, $message_body);
+      The Q-Management Team';
+
+      if (!$mail->send()) {
+        echo $mail->ErrorInfo;
+      } else {
+        header("Location: index.php");
+      }
     }
   }
 }
