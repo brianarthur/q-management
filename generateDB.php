@@ -1,6 +1,6 @@
 <?php
 include('db.php');
-if($query=$pdo->prepare("DROP TABLE IF EXISTS class, schedule;"))
+if($query=$pdo->prepare("DROP TABLE IF EXISTS class, schedule, user;"))
 {
 	$query->execute();
 }
@@ -15,6 +15,8 @@ if($query=$pdo->prepare("CREATE TABLE class (
 if($query=$pdo->prepare("CREATE TABLE schedule (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			schedule varchar(255) NOT NULL COMMENT 'Schedule in array of days',
+			type int(11) NOT NULL DEFAULT '1' COMMENT 'Type of schedule: 0 is default, 1 is edited user schedule',
+			section_number int(11) NOT NULL,
 			PRIMARY KEY(id) );"
 			)) {
 	$query->execute();
@@ -27,6 +29,7 @@ if($query=$pdo->prepare("CREATE TABLE user (
 			password varchar(255) NOT NULL,
 			hash varchar(255) NOT NULL,
 			active tinyint NOT NULL DEFAULT '0',
+			schedule_id int(11) NOT NULL DEFAULT '0',
 			PRIMARY KEY(id) );"
 			)) {
 	$query->execute();
@@ -48,13 +51,14 @@ if($query=$pdo->prepare("INSERT INTO `class` (
 	$query->execute();
 }
 
+for ($x = 0; $x <= 18; $x++) {
 if($query=$pdo->prepare("INSERT INTO `schedule` (
-		`schedule`) VALUES
-			('[[1,1,1,1,1,1],[1,4,5,1,3,1],[1,6,1,4,3,1],[1,3,4,1,6,1],[1,3,4,1,5,1],[1,5,3,1,4,1],[1,1,1,1,1,1]]');"
+		`schedule`, `section_number`, `type`) VALUES
+			('[[1,1,1,1,1,1],[1,4,5,1,3,1],[1,6,1,4,3,1],[1,3,4,1,6,1],[1,3,4,1,5,1],[1,5,3,1,4,1],[1,1,1,1,1,1]]', '$x', '0');"
 		)) {
 	$query->execute();
 }
-
+}
 
 ?>
 
