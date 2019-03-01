@@ -36,7 +36,41 @@
     	return false;
   }
 ?>
-<div id="schedule">
+<div class="schedule-content">
+  <div class="sidebar">
+    <div class="class-list">
+      <div class="sidebar-header">
+        <h3>Activity</h3>
+      </div>
+      <div id="study-block">
+        <?php
+          foreach ($class_list as $class) {
+              echo "<div class='schedule-input original-block' style='background-color: #".$class['color'].";'";
+              echo "data-schedule=".$class['id'].">";
+              echo $class['name'];
+              echo "</div>";
+          }
+        ?>
+      </div>
+    </div>
+
+    <div class="class-stats">
+      <div class="sidebar-header">
+        <h3>Recommended Hours Remaining</h3>
+      </div>
+      <div id="statistics">
+        <div class='schedule-input'>1</div>
+        <div class='schedule-input'>1</div>
+        <div class='schedule-input'>1</div>
+        <div class='schedule-input'>1</div>
+        <div class='schedule-input'>1</div>
+        <div class='schedule-input'>1</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="schedule">
   <div class="drag-container">
     <ul class="drag-list">
     	<li class="drag-column header1">
@@ -45,6 +79,18 @@
     		</span>
     		<ul class="times">
     			<li class="schedule-input">7:30</li>
+    			<li class="schedule-input">8:30</li>
+    			<li class="schedule-input">9:30</li>
+    			<li class="schedule-input">10:30</li>
+    			<li class="schedule-input">11:30</li>
+    			<li class="schedule-input">12:30</li>
+          <li class="schedule-input">1:30</li>
+    			<li class="schedule-input">2:30</li>
+    			<li class="schedule-input">3:30</li>
+    			<li class="schedule-input">4:30</li>
+    			<li class="schedule-input">5:30</li>
+    			<li class="schedule-input">6:30</li>
+          <li class="schedule-input">7:30</li>
     			<li class="schedule-input">8:30</li>
     			<li class="schedule-input">9:30</li>
     			<li class="schedule-input">10:30</li>
@@ -85,18 +131,6 @@
     </ul>
   </div>
 
-  <div class="">
-    <div id="study-block" class="d-flex justify-content-around">
-      <?php
-        foreach ($class_list as $class) {
-          echo "<div class='schedule-input original-block' style='background-color: #".$class['color'].";'";
-          echo "data-schedule=".$class['id'].">";
-          echo $class['name'];
-          echo "</div>";
-        }
-      ?>
-    </div>
-  </div>
-
   <button id="save_schedule" class="btn btn-primary mt-4">SAVE</button>
+</div>
 </div>

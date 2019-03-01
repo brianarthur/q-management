@@ -42,7 +42,7 @@
 ?>
 
 
-<div class='content'>
+<div id='content'>
   <div class='row justify-content-md-center'>
     <div class='col-sm-4'>
       <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
