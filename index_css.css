@@ -161,6 +161,7 @@ body {
   overflow-y: auto;
   padding-top: 20px;
   padding-left: 10px;
+  padding-right: 10px;
   color: white;
   margin-right: 40px;
   display: flex;
@@ -189,8 +190,7 @@ body {
   background-color: #d9d8d3;
   color: black;
   width: 30%;
-  position: relative;
-  left: 35%;
+  margin-bottom: 0px;
 }
 
 #content {
@@ -204,4 +204,14 @@ body {
   padding-top: 100px;
   background-color: white;
   z-index: 1000;
+}
+
+#statistics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-form {
+  height: 40px;
 }

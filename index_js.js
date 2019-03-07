@@ -18,10 +18,14 @@ var drake = dragula([
 
 .on('drag', function(el) {
 
+	if ($selected) {
+		$selected.removeClass("glow");
+		$selected = null;
+	}
+
 	// add 'is-moving' class to element being dragged
 	el.classList.add('is-moving');
 	$(el).removeClass("glow");
-	$selected = null;
 })
 .on('dragend', function(el) {
 
@@ -128,3 +132,31 @@ $('#save_schedule').click(function(){
 		}
 	});
 });
+
+$("#add-activity").click(function (){
+	addActivity();
+});
+
+$("#new-activity").submit(function(e) {
+	e.preventDefault();
+	addActivity();
+});
+
+function addActivity(){
+	var inputName = $("#activity-name").val();
+	if (inputName != '') {
+		$.ajax({
+			url: "add_class.php",
+			type: "POST",
+			data: {activityName : inputName},
+			success: function (data) {
+				if (data.error) {
+					$('body').append(data.error.msg);
+				} else {
+					var element = "<div class='schedule-input original-block' style='background-color: #11ee33" + data.class.color + ";' data-schedule=" + data.class.id + ">" + data.class.name + "</div>";
+					$('#study-block').append(element);
+				}
+			}
+		});
+	}
+}
