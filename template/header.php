@@ -2,6 +2,8 @@
 
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<?php
 		$current = ($_SERVER['PHP_SELF']);
 		if ($current == '/q-management/index.php') {

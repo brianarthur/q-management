@@ -59,11 +59,14 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
 
       The Q-Management Team';
 
-      if (!$mail->send()) {
+      // TODO send email upon registering
+      /*if (!$mail->send()) {
         echo $mail->ErrorInfo;
       } else {
         header("Location: index.php");
-      }
+      }*/
+
+      header("Location: index.php");
     }
   }
 }

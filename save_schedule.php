@@ -6,7 +6,6 @@
     $user_id = $_SESSION['id'];
     $schedule = json_encode($_POST['schedule']);
 
-    header('Content-Type: application/json');
     try {
       $result = $mysqli->query("SELECT `schedule_id` FROM `user` WHERE `id` = '$user_id'") or die($mysqli->error);
       if ($result->num_rows == 1) {
@@ -17,6 +16,7 @@
         throw new Exception('Error saving new schedule.');
       }
     } catch (Exception $e) {
+      header('Content-Type: application/json');
       echo json_encode(array(
         'error' => array(
           'msg' => $e->getMessage(),
