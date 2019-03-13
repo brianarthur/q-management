@@ -22,13 +22,14 @@
       return false;
   }
 
-  if ($query = $pdo->prepare("SELECT `schedule` FROM `schedule` WHERE `id` = :id")) {
+  if ($query = $pdo->prepare("SELECT `schedule`, `section_number` FROM `schedule` WHERE `id` = :id")) {
       $query_array = array(
     		"id"=>$_SESSION['schedule'],
     	);
       $query->execute($query_array);
     	while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
     		$schedule = json_decode($result['schedule']);
+        $schedule_section = $result['section_number'];
     	}
     	//print_r($schedule);
     }
@@ -45,16 +46,12 @@
         <h3>Activity</h3>
       </div>
       <div id="study-block">
-        <form id="new-activity">
-          <input id="activity-name" class="form-control activity-form" type="text" placeholder="New activity" name="activity-name"></input>
-        </form>
         <?php
           foreach ($class_list as $class) {
             if ($class['type'] == '1') {
-              echo "<div class='schedule-input original-block' style='background-color: #".$class['color'].";'";
-              echo "data-schedule=".$class['id'].">";
+              echo "<div class='schedule-input original-block' style='background-color: #".$class['color'].";' data-schedule=".$class['id'].">";
               echo $class['name'];
-              echo "</div>";
+              echo "</div>\n";
             }
           }
         ?>
@@ -66,7 +63,6 @@
         <h3>Recommended Hours Remaining</h3>
       </div>
       <div id="statistics">
-        <button id="add-activity" class="btn btn-sm btn-primary activity-form">Add activity</button>
         <div class='schedule-input'>1</div>
         <div class='schedule-input'>1</div>
         <div class='schedule-input'>1</div>
@@ -79,6 +75,26 @@
 
 
   <div id="schedule">
+    <div id='schedule-menu' class="mb-4">
+      <form id="new-activity">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Create new activity</div>
+          </div>
+          <input id="activity-name" class="form-control" type="text" placeholder="New activity name (probably need a profanity filter)" name="activity-name" autocomplete="off" required>
+          <div class="input-group-append">
+            <button id="add-activity" class="btn btn-sm btn-info">+</button>
+          </div>
+        </div>
+      </form>
+      <div class="btn-group">
+        <button id="save_schedule" class="btn btn-outline-primary">SAVE</button>
+        <button id="export_schedule" class="btn btn-outline-info">EXPORT</button>
+        <button id="discard_changes" class="btn btn-outline-danger">DISCARD</button>
+      </div>
+      <div style="color:black;">Change section <?=$schedule_section?>? Do we need this???</div>
+    </div>
+
     <div class="drag-container">
       <ul class="drag-list">
       	<li class="drag-column header1">
@@ -136,6 +152,5 @@
         ?>
       </ul>
     </div>
-    <button id="save_schedule" class="btn btn-primary mt-4">SAVE</button>
   </div>
 </div>
