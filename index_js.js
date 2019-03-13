@@ -14,20 +14,16 @@ var drake = dragula([
 			return container === document.getElementById('study-block');
 		}
 	}
-)
-
-.on('drag', function(el) {
+).on('drag', function(el) {
 
 	if ($selected) {
 		$selected.removeClass("glow");
 		$selected = null;
 	}
 
-	// add 'is-moving' class to element being dragged
 	el.classList.add('is-moving');
 	$(el).removeClass("glow");
-})
-.on('dragend', function(el) {
+}).on('dragend', function(el) {
 
 	// remove 'is-moving' class from element after dragging has stopped
 	$(el).removeClass("is-moving glow original-block");
@@ -41,8 +37,7 @@ var drake = dragula([
 	}, 100);
 */
 	//getScheduleValues();
-})
-.on('drop', function(el, target) {
+}).on('drop', function(el, target) {
 	if (target) {
 		var i;
 		var elements = target.children;
@@ -52,8 +47,7 @@ var drake = dragula([
 			}
 		}
 	}
-})
-.on('over', function(el, container) {
+}).on('over', function(el, container) {
 	$(el).removeClass("glow");
 	if (container !== document.getElementById('study-block')) {
 		var i;
@@ -62,8 +56,7 @@ var drake = dragula([
 			$(elements[i]).hide();
 		}
 	}
-})
-.on('out', function(el, container) {
+}).on('out', function(el, container) {
 	if (container !== document.getElementById('study-block')) {
 		var i;
 		var elements = container.children;
@@ -98,7 +91,7 @@ getScheduleValues();
 
 var $selected;
 
-$(window).click(function(el){
+$(window).on('click touchstart', function(el){
 	if($(el.target).hasClass("original-block")){
 		if ($selected) {
 			$selected.removeClass("glow");
@@ -120,6 +113,7 @@ $(window).click(function(el){
 });
 
 $('#save_schedule').click(function(){
+	$("#save_alert").remove();
 	var schedule = getScheduleValues();
 	$.ajax({
 		url: "save_schedule.php",
@@ -128,13 +122,19 @@ $('#save_schedule').click(function(){
 		success: function (data){
 			if (data.error) {
 				$('body').append(data.error.msg);
+			} else {
+				var alertMessage = '<div id="save_alert" class="alert alert-success alert-dismissible fade show" role="alert">Schedule saved.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+				$('#schedule').prepend(alertMessage);
 			}
 		}
 	});
 });
 
-$("#add-activity").click(function (){
-	addActivity();
+$('#discard_changes').click(function(){
+	var confirmDiscard = confirm("Are you sure you want to discard all recent changes. There is no way to undo this action. Click cancel to go back and save your changes.");
+	if (confirmDiscard){
+		document.location.reload(true);
+	}
 });
 
 $("#new-activity").submit(function(e) {
@@ -151,12 +151,18 @@ function addActivity(){
 			data: {activityName : inputName},
 			success: function (data) {
 				if (data.error) {
-					$('body').append(data.error.msg);
+					$('body').append(data.error.msg);	//Need better error control
 				} else {
 					var element = "<div class='schedule-input original-block' style='background-color: #11ee33" + data.class.color + ";' data-schedule=" + data.class.id + ">" + data.class.name + "</div>";
 					$('#study-block').append(element);
+					$("#activity-name").val('');
 				}
 			}
 		});
 	}
 }
+
+// Mobile
+document.getElementById('study-block').addEventListener("touchmove", function (e) {
+	e.preventDefault();
+}, {passive: false});
