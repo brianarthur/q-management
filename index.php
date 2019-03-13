@@ -47,7 +47,7 @@
 
 
   <div id="content">
-  <?
+  <?php
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
       if (isset($_SESSION['schedule']) && $_SESSION['schedule'] != 0) {
         require("./show_schedule.php");
