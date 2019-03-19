@@ -103,5 +103,6 @@
 			$schedule[$day][$i] = $course;
 			$i++;
 		}	
+
 	}
 ?>
