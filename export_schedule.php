@@ -4,8 +4,10 @@
   require('./db.php');
   session_start();
 
+    //TODO remove hardcoded values
     $start_date = "20190310";
-    $start = 730;
+    $end_date = "20191225";
+    $start = 1230;
     $inc = 100; //1 hour //potential bug lol
 	$user_id = $_SESSION['id'];
 
@@ -42,16 +44,20 @@
         //echo "My SQL Error: " . $error;
         throw new Exception('Error 3 exporting schedule.');
       }
+
+      /** building ics file from schedule **/
+
+      //file header
       echo "BEGIN:VCALENDAR";
       echo "\nPRODID:-//Queens University/q-management//EN";
       echo "\nVERSION:2.0";
       echo "\nCALSCALE:GREGORIAN";
       echo "\nX-WR-CALNAME:calendar";
       echo "\nX-WR-TIMEZONE:America/Toronto";
-      /*echo "\nBEGIN:VTIMEZONE";
-      echo "\nTZID:America/New_York";
-      echo "\nTZURL:http://tzurl.org/zoneinfo-outlook/America/New_York";
-      echo "\nX-LIC-LOCATION:America/New_York";
+      echo "\nBEGIN:VTIMEZONE";
+      echo "\nTZID:America/Toronto";
+      echo "\nTZURL:http://tzurl.org/zoneinfo-outlook/America/Toronto";
+      echo "\nX-LIC-LOCATION:America/Toronto";
       echo "\nBEGIN:DAYLIGHT";
       echo "\nTZOFFSETFROM:-0500";
       echo "\nTZOFFSETTO:-0400";
@@ -66,32 +72,36 @@
       echo "\nDTSTART:19701101T020000";
       echo "\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU";
       echo "\nEND:STANDARD";
-      echo "\nEND:VTIMEZONE";*/
+      echo "\nEND:VTIMEZONE";
 
+      //iterate through each day of schedule
       $date = date_create($start_date);
       foreach ( $schedule as $day){
         $hour = 0;
-        foreach ($day as $id){
-          if ($id != 1){
+        //iterate through each hour of day
+        foreach ($day as $activity_id){
+          if ($activity_id != 1){ // if not empty time block, create event
             echo "\nBEGIN:VEVENT";
-            echo "\nDTSTART:". date_format($date, "Ymd") ."T" . ($start+$hour*$inc). "00Z";
-            echo "\nDTEND:" . date_format($date, "Ymd") ."T" . ($start+$hour*$inc + 100) . "00Z"; //sus af
+            echo "\nDTSTART:". date_format($date, "Ymd") ."T" . (($start+$hour*$inc)%2400). "00Z";
+            echo "\nDTEND:" . date_format($date, "Ymd") ."T" . (($start+$hour*$inc + 100)%2400) . "00Z";
             echo "\nDTSTAMP:".date("Ymd")."T".date("His")."Z";
-            echo "\nUID:".date("YmdHis").$hour."@q-management.com";
-            echo "\nCREATED:".date("Ymd")."T".date("His")."Z";
-            //echo "\nDESCRIPTION:".$activity_list[$id]['Teacher'];
-            //echo "\nLOCATION:".$activity_list[$id]['Location'];
+            echo "\nUID:".date("YmdHis").rand()."@q-management.com";
+            echo "\nRRULE:FREQ=WEEKLY;UNTIL=". $end_date ."T000000Z";
+            //echo "\nDESCRIPTION:".$activity_list[$activity_id]['Teacher'];
+            //echo "\nLOCATION:".$activity_list[$activity_id]['Location'];
             echo "\nSEQUENCE:0";
             echo "\nSTATUS:CONFIRMED";
-            echo "\nSUMMARY:".$activity_list[$id]['name'];
+            echo "\nSUMMARY:".$activity_list[$activity_id]['name'];
             echo "\nTRANSP:OPAQUE";
             echo "\nEND:VEVENT";
           }
           $hour++;
         }
-        date_add($date, new DateInterval('P1D'));
+        date_add($date, new DateInterval('P1D')); //add 1 day to date identifier
       }
+      //file footer
       echo "\nEND:VCALENDAR";
+
     } catch (Exception $e) {
         echo ('error in main');
         echo json_encode(array(
