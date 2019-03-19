@@ -38,9 +38,10 @@
     	echo "My SQL Error: " . $error;
     	return false;
   }
+  $constantColour = "1a5dc9";
 ?>
 <div class="schedule-content">
-  <div class="sidebar">
+  <div id="sidebar" class="sidebar">
     <div class="class-list">
       <div class="sidebar-header">
         <h3>Activity</h3>
@@ -49,8 +50,14 @@
         <?php
           foreach ($class_list as $class) {
             if ($class['type'] == '1') {
-              echo "<div class='schedule-input original-block' style='background-color: #".$class['color'].";' data-schedule=".$class['id'].">";
-              echo $class['name'];
+              echo "<div class='schedule-input original-block' style='background-color: #";
+                if ($class['color']) {
+                  echo $class['color'];
+                } else {
+                  echo $constantColour;
+                }
+                echo ";' data-schedule=".$class['id'].">";
+                echo $class['name'];
               echo "</div>\n";
             }
           }
@@ -123,10 +130,11 @@
       		</ul>
       	</li>
         <?php
+          $weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
           foreach ($schedule as $day_num => $day) {
             echo '<li class="drag-column header2">';
               echo '<span class="drag-column-header">';
-                echo '<h2>Day '.$day_num.'</h2>';
+                echo '<h2>'.$weekdays[$day_num].'</h2>';
               echo '</span>';
               echo '<ul class="drag-inner-list" id="'.$day_num.'">';
                 foreach ($day as $schedule_class) {
@@ -134,7 +142,13 @@
                     if ($schedule_class == $class['id']) {
                       if ($class['type'] == 1){
                         echo '<li class="drag-item">';
-                        echo '<div class="schedule-input" data-schedule="'.$class['id'].'" style="background-color: #'.$class['color'].';">';
+                        echo '<div class="schedule-input" data-schedule="'.$class['id'].'" style="background-color: #';
+                        if ($class['color']) {
+                          echo $class['color'];
+                        } else {
+                          echo $constantColour;
+                        }
+                        echo ';">';
                       } elseif ($class['type'] == 0) {
                         echo '<li>';
                         echo '<div class="schedule-input class" data-schedule="'.$class['id'].'" style="background-color: #'.$class['color'].';">';
