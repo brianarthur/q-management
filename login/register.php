@@ -44,6 +44,8 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
 
       // Send registration confirmation link
       // TODO need to verify how server will send emails
+      // TODO send email upon registering
+      /*
       require('../mail.php');
       $mail->setFrom('q-management@queensu.case', 'Q Management');
       $mail->addAddress($email, $first_name.' '.$last_name);
@@ -59,8 +61,8 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
 
       The Q-Management Team';
 
-      // TODO send email upon registering
-      /*if (!$mail->send()) {
+
+      if (!$mail->send()) {
         echo $mail->ErrorInfo;
       } else {
         header("Location: index.php");
