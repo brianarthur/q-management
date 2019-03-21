@@ -143,8 +143,9 @@ $("#new-activity").submit(function(e) {
 });
 
 function addActivity(){
+	var maxLength = 20;
 	var inputName = $("#activity-name").val();
-	if (inputName != '') {
+	if (inputName != '' && inputName.length < maxLength) {
 		$.ajax({
 			url: "add_class.php",
 			type: "POST",
@@ -153,12 +154,17 @@ function addActivity(){
 				if (data.error) {
 					$('body').append(data.error.msg);	//Need better error control
 				} else {
-					var element = "<div class='schedule-input original-block' style='background-color: #11ee33" + data.class.color + ";' data-schedule=" + data.class.id + ">" + data.class.name + "</div>";
+					var element = "<div class='schedule-input original-block' style='background-color: #1a5dc9" + data.class.color + ";' data-schedule=" + data.class.id + ">" + data.class.name + "</div>";
 					$('#study-block').append(element);
 					$("#activity-name").val('');
 				}
 			}
 		});
+	} else if (inputName.length >= maxLength) {
+		var popover = $('#activity-name')
+		popover.popover('enable');
+		popover.popover('show');
+		popover.popover('disable');
 	}
 }
 
@@ -166,3 +172,9 @@ function addActivity(){
 document.getElementById('study-block').addEventListener("touchmove", function (e) {
 	e.preventDefault();
 }, {passive: false});
+
+//document.getElementById('sidebar').addEventListener("touchmove", function () {
+	//document.getElementById('schedule').addEventListener("touchstart", function (e) {
+		//e.preventDefault();
+	//}, {passive: false});
+//}, {passive: false});

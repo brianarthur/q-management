@@ -88,7 +88,7 @@
           <div class="input-group-prepend">
             <div class="input-group-text">Create new activity</div>
           </div>
-          <input id="activity-name" class="form-control" type="text" placeholder="New activity name (probably need a profanity filter)" name="activity-name" autocomplete="off" required>
+          <input id="activity-name" class="form-control" type="text" placeholder="New activity name" name="activity-name" autocomplete="off" required data-toggle="popover" data-placement="top" data-trigger="focus" data-content="Exceeds max length.">
           <div class="input-group-append">
             <button id="add-activity" class="btn btn-sm btn-info">+</button>
           </div>
@@ -99,7 +99,6 @@
         <button id="export_schedule" class="btn btn-outline-info">EXPORT</button>
         <button id="discard_changes" class="btn btn-outline-danger">DISCARD</button>
       </div>
-      <div style="color:black;">Change section <?=$schedule_section?>? Do we need this???</div>
     </div>
 
     <div class="drag-container">
