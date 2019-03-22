@@ -130,6 +130,10 @@ $('#save_schedule').click(function(){
 	});
 });
 
+$('#export_schedule').click(function(){
+	window.location.href = "./export_schedule.php?click=export";
+});
+
 $('#discard_changes').click(function(){
 	var confirmDiscard = confirm("Are you sure you want to discard all recent changes. There is no way to undo this action. Click cancel to go back and save your changes.");
 	if (confirmDiscard){
