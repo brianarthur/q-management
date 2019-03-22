@@ -1,4 +1,6 @@
 <?php
+// only export if button was clicked
+if ($_GET['click'] == 'export') {
   header('Content-type: text/calendar');
   header('Content-Disposition: inline; filename=calendar.ics');
   require('./db.php');
@@ -110,4 +112,7 @@
             ),
         ));
     }
+} else {
+  header('Location: index.php');
+}
 ?>
