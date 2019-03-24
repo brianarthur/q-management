@@ -148,9 +148,11 @@ $(window).on('click touchstart', function(el){
 	}
 });
 
-$('#save_schedule').click(function(){
+$('#save_schedule').click(() => saveSchedule());
+
+async function saveSchedule() {
 	$("#save_alert").remove();
-	var schedule = getScheduleValues();
+	var schedule = await getScheduleValues();
 	$.ajax({
 		url: "save_schedule.php",
 		type: "POST",
@@ -164,9 +166,10 @@ $('#save_schedule').click(function(){
 			}
 		}
 	});
-});
+}
 
-$('#export_schedule').click(function(){
+$('#export_schedule').click(async function(){
+	await saveSchedule();
 	window.location.href = "./export_schedule.php?click=export";
 });
 
