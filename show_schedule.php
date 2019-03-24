@@ -70,12 +70,14 @@
         <h3>Recommended Hours Remaining</h3>
       </div>
       <div id="statistics">
-        <div class='schedule-input'>1</div>
-        <div class='schedule-input'>1</div>
-        <div class='schedule-input'>1</div>
-        <div class='schedule-input'>1</div>
-        <div class='schedule-input'>1</div>
-        <div class='schedule-input'>1</div>
+        <div class='schedule-input' style="opacity: 0;"></div>
+        <div class='schedule-input'>5</div>
+        <div class='schedule-input'>3</div>
+        <div class='schedule-input'>3</div>
+        <div class='schedule-input'>2</div>
+        <div class='schedule-input'>5</div>
+        <div class='schedule-input'>4</div>
+        <div class='schedule-input'>2</div>
       </div>
     </div>
   </div>
@@ -149,8 +151,8 @@
                         }
                         echo ';">';
                       } elseif ($class['type'] == 0) {
-                        echo '<li>';
-                        echo '<div class="schedule-input class" data-schedule="'.$class['id'].'" style="background-color: #'.$class['color'].';">';
+                        echo '<li class="class">';
+                        echo '<div class="schedule-input" data-schedule="'.$class['id'].'" style="background-color: #'.$class['color'].';">';
                       }
                           echo $class['name'];
                         echo '</div>';

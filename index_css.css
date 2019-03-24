@@ -11,11 +11,39 @@ body {
   position: fixed;
 }
 
+.schedule-input {
+  user-select: none;
+}
+
 #schedule {
   color: white !important;
   flex: 1;
   margin-left: 300px;
   margin-bottom: 50px;
+}
+
+.original-block:hover {
+  text-decoration: underline;
+}
+
+.extend-class {
+  padding-top: 10px;
+  margin: 0 5px;
+}
+
+.extend-top {
+  margin: 0 5px;
+  border-radius: 5px 5px 0 0;
+}
+
+.extend-bottom {
+  padding-top: 10px;
+  margin: 0 5px;
+  border-radius: 0 0 5px 5px
+}
+
+.extend-class .schedule-input, .extend-bottom .schedule-input {
+  margin: 0 !important;
 }
 
 .schedule-content {
@@ -89,8 +117,13 @@ body {
 }
 
 .class {
-  opacity: 0.3;
+  opacity: 0.5;
   color: black;
+  margin: 0 5px;
+}
+
+.class .schedule-input {
+  margin: 10px 0 0;
 }
 
 .drag-item {
@@ -105,7 +138,7 @@ body {
 
 .schedule-input {
   border-radius: 5px;
-  margin: 10px 5px;
+  margin: 10px 5px 0;
   text-align: center !important;
   min-height: 50px;
   max-height: 50px;
