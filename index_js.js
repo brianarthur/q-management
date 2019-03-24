@@ -113,6 +113,7 @@ $(window).on('click touchstart', function(el){
 });
 
 $('#save_schedule').click(function(){
+	$("#export_alert").remove();
 	$("#save_alert").remove();
 	var schedule = getScheduleValues();
 	$.ajax({
@@ -128,6 +129,14 @@ $('#save_schedule').click(function(){
 			}
 		}
 	});
+});
+
+$('#export_schedule').click(function(){
+	$("#save_alert").remove();
+	$("#export_alert").remove();
+	var alertMessage = '<div id="save_alert" class="alert alert-success alert-dismissible fade show" role="alert">Schedule exported.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+				$('#schedule').prepend(alertMessage);
+	window.location.href = "export_schedule.php";
 });
 
 $('#discard_changes').click(function(){

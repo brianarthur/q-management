@@ -1,9 +1,8 @@
 <?php
-  header('Content-type: text/calendar');
-  header('Content-Disposition: inline; filename=calendar.ics');
-  require('./db.php');
-  session_start();
-
+	require('./db.php');
+	session_start();
+	$filename = "Calendar-".date("m.d.y").".ics";
+		
     //TODO remove hardcoded values
     $start_date = "20190310";
     $end_date = "20191225";
@@ -20,7 +19,8 @@
       } else {
         throw new Exception('Error 1 exporting schedule.');
       }
-      // use schedule id to query full schedule in array format
+      
+	  // use schedule id to query full schedule in array format
       $result = $mysqli->query("SELECT `schedule` FROM `schedule` WHERE `id` = '$schedule_id'") or die($mysqli->error);
       if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
@@ -28,20 +28,16 @@
       } else {
         throw new Exception('Error 2 exporting schedule.');
       }
-      // read in all defined activities from class table
+      
+	  // read in all defined activities from class table
       if ($query = $pdo->prepare("SELECT `id`, `name`, `type` FROM `class`")) {
         $query->execute();
         while ($result = $query->fetch(PDO::FETCH_ASSOC)) { //while result is not null,
           // use activity id as index in array
           $activity_list [$result['id']]['name'] = $result['name'];
           $activity_list [$result['id']]['type'] = $result['type'];
-
         }
-        //print_r($activity_list);
-      }
-      else {
-        //$error = $query->errorInfo();
-        //echo "My SQL Error: " . $error;
+      } else {
         throw new Exception('Error 3 exporting schedule.');
       }
 
@@ -87,7 +83,8 @@
             echo "\nDTSTAMP:".date("Ymd")."T".date("His")."Z";
             echo "\nUID:".date("YmdHis").rand()."@q-management.com";
             echo "\nRRULE:FREQ=WEEKLY;UNTIL=". $end_date ."T000000Z";
-            //echo "\nDESCRIPTION:".$activity_list[$activity_id]['Teacher'];
+            //TODO add more fields
+			//echo "\nDESCRIPTION:".$activity_list[$activity_id]['Teacher'];
             //echo "\nLOCATION:".$activity_list[$activity_id]['Location'];
             echo "\nSEQUENCE:0";
             echo "\nSTATUS:CONFIRMED";
@@ -103,11 +100,15 @@
       echo "\nEND:VCALENDAR";
 
     } catch (Exception $e) {
-        echo ('error in main');
+        header('Content-Type: application/json');
         echo json_encode(array(
             'error' => array(
                 'msg' => $e->getMessage(),
             ),
         ));
-    }
+	
+	}
+	header('Content-type: text/calendar');
+	header('Content-Disposition: inline; filename='.$filename);
+  
 ?>
