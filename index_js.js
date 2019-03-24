@@ -46,6 +46,7 @@ var drake = dragula([
 				$(elements[i]).remove();
 			}
 		}
+		updateExtendClasses();
 	}
 }).on('over', function(el, container) {
 	$(el).removeClass("glow");
@@ -66,7 +67,41 @@ var drake = dragula([
 	}
 });
 
+function updateExtendClasses() {
+	removeExtendClasses();
+	var schedule = getScheduleValues();
+	var extendStart = false;
+	for (var i = 0; i < schedule.length; i++) {
+		var daySchedule = schedule[i];
+		var $dayList = $("#" + i);
+		for (var j = 0; j < daySchedule.length; j++) {
+			if (daySchedule[j] != 1) { //Don't extend block items
+				if (daySchedule[j] == daySchedule[j + 1] || extendStart) {
+					var element = $dayList.children()[j];
+					var colour = $($(element).children()[0]).css("background-color");
+					$(element).css("background-color", colour);
+					if (daySchedule[j] != daySchedule[j + 1]) {
+						$(element).addClass("extend-bottom")
+						extendStart = false;
+					} else if (extendStart) {
+						$(element).addClass("extend-class");
+					} else {
+						$(element).addClass("extend-top");
+						extendStart = true;
+					}
+				}
+			}
+		}
+	}
+}
 
+function removeExtendClasses() {
+	var extendElements = $(".extend-top, .extend-class, .extend-bottom");
+	for (var i = 0; i < extendElements.length; i++) {
+		$(extendElements[i]).removeClass("extend-top extend-class extend-bottom");
+		$(extendElements[i]).css("background-color", "");
+	}
+}
 
 function getScheduleValues() {
 	var dragBoxes;
@@ -87,7 +122,8 @@ function getScheduleValues() {
 	return values;	//ABLE TO SAVE THESE VALUES IN DATABASE
 }
 
-getScheduleValues();
+//getScheduleValues();
+updateExtendClasses();
 
 var $selected;
 
@@ -104,7 +140,7 @@ $(window).on('click touchstart', function(el){
 		if ($parent.hasClass("drag-item")) {
 			$parent.html($selected.clone());
 			$parent.children().removeClass("glow original-block");
-			getScheduleValues();
+			updateExtendClasses();
 		}
 	} else if ($selected) {
 		$selected.removeClass("glow");
@@ -176,6 +212,43 @@ function addActivity(){
 document.getElementById('study-block').addEventListener("touchmove", function (e) {
 	e.preventDefault();
 }, {passive: false});
+
+var dragStart;
+var dragStartElement;
+var dragEndElement;
+var dragList;
+
+$(".drag-item .schedule-input").on("mousedown", (e)=>dragStartSelection(e));
+$(".drag-item .schedule-input").on("mouseup", (e)=>dragEndSelection(e));
+
+function dragStartSelection(e) {
+	dragStartElement = $(e.target).parent();
+	if ($selected) {
+		dragList = dragStartElement.parent()[0];
+		dragStart = true;
+	}
+}
+
+function dragEndSelection(e) {
+	dragEndElement = $(e.target).parent();
+	if (dragStart) {
+		dragStart = false;
+		if (dragEndElement.parent()[0] == dragList) {
+			startIndex = dragStartElement.index();
+			endIndex = dragEndElement.index();
+			for (var i = startIndex; i <= endIndex; i++) {
+				var element = $(dragList).children().eq(i);
+				if (element.hasClass('drag-item')){
+					element.html($selected.clone());
+					element.on("mousedown", (e)=>dragStartSelection(e));
+					element.on("mouseup", (e)=>dragEndSelection(e));
+					element.children().removeClass("glow original-block");
+				}
+			}
+			updateExtendClasses();
+		}
+	}
+}
 
 //document.getElementById('sidebar').addEventListener("touchmove", function () {
 	//document.getElementById('schedule').addEventListener("touchstart", function (e) {
