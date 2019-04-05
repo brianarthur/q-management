@@ -5,7 +5,6 @@
   if (isset($_POST['schedule'])) {
     $user_id = $_SESSION['id'];
     $schedule = json_encode($_POST['schedule']);
-
     try {
       $result = $mysqli->query("SELECT `schedule_id` FROM `user` WHERE `id` = '$user_id'") or die($mysqli->error);
       if ($result->num_rows == 1) {
