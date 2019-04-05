@@ -256,6 +256,7 @@ function dragEndSelection(e) {
 
 function updateScheduledTimes() {
 	var hoursPerCourse = [];
+	let hoursRequiredPerCourse = [5,3,3,2,5,4,2];
 	for (let index = 0; index < 16; index++) {
 		hoursPerCourse[index] = 0;
 
@@ -270,7 +271,9 @@ function updateScheduledTimes() {
 
 	for (let index = 9; index < 16; index++) {
 		if (hoursPerCourse[index] == null) hoursPerCourse[index] = 0;
-		document.getElementById(`hourCount${index-9}`).innerHTML = hoursPerCourse[index];
+		let tempNum = hoursRequiredPerCourse[index-9] - hoursPerCourse[index];
+		if(tempNum < 0) tempNum = 0;
+		document.getElementById(`hourCount${index-9}`).innerHTML = tempNum;
 	}
 	
 }
