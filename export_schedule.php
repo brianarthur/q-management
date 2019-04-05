@@ -104,6 +104,8 @@ if ($_GET['click'] == 'export') {
       //file footer
       echo "\nEND:VCALENDAR";
 
+      
+
     } catch (Exception $e) {
         echo ('error in main');
         echo json_encode(array(

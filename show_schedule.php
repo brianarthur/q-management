@@ -71,13 +71,13 @@
       </div>
       <div id="statistics">
         <div class='schedule-input' style="opacity: 0;"></div>
-        <div class='schedule-input'>5</div>
-        <div class='schedule-input'>3</div>
-        <div class='schedule-input'>3</div>
-        <div class='schedule-input'>2</div>
-        <div class='schedule-input'>5</div>
-        <div class='schedule-input'>4</div>
-        <div class='schedule-input'>2</div>
+        <div class='schedule-input' ><p id="hourCount0">0</p></div>
+        <div class='schedule-input' ><p id="hourCount1">0</p></div>
+        <div class='schedule-input'><p id="hourCount2">0</p></div>
+        <div class='schedule-input'><p id="hourCount3">0</p></div>
+        <div class='schedule-input'><p id="hourCount4">0</p></div>
+        <div class='schedule-input'><p id="hourCount5">0</p></div>
+        <div class='schedule-input'><p id="hourCount6">0</p></div>
       </div>
     </div>
   </div>
