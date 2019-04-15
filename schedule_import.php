@@ -1,16 +1,21 @@
 <?php
+function uploadFileToDatabase($file){
+	$section = $file[7].$file[8];
 	// If you need to parse XLS files, include php-excel-reader
 	require('spreadsheet-reader-master/php-excel-reader/excel_reader2.php');
 
 	require('spreadsheet-reader-master/SpreadsheetReader.php');
+	include('./db.php');
 	$schedule = array(
 		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
 		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
 		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
 		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
 		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
+		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
+		array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
 	); 
-	$Reader = new SpreadsheetReader('Section01Timetable.xlsx');
+	$Reader = new SpreadsheetReader('files/'.$file);
 	$day=0;
 	$timeStart=0;
 	$timeEnd=0;
@@ -103,6 +108,15 @@
 			$schedule[$day][$i] = $course;
 			$i++;
 		}	
+		
 
 	}
+	$jsonSchedule = json_encode($schedule);
+		if($query=$pdo->prepare("INSERT INTO `schedule` (
+			`schedule`, `section_number`, `type`) VALUES
+			('$jsonSchedule', '$section', '0');"
+			)) {
+			$query->execute();
+		}
+}
 ?>
