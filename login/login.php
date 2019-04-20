@@ -24,6 +24,11 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
       $_SESSION['id'] = $user['id'];
       $_SESSION['timeout'] = time();
       $_SESSION['alert'] = "Successfully logged in.";
+      if ($user['user_type'] == '1') {
+        $_SESSION['admin'] = true;
+      } else {
+        $_SESSION['admin'] = false;
+      }
 
       header("location: index.php");
 

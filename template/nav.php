@@ -25,6 +25,11 @@
       <ul class="navbar-nav navbar-right">
         <?php
           if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
+            //echo '<li class="nav-item mr-3">';
+              //echo '<a class="nav-link" href="'.$home.'settings.php">';
+                //echo '<img src="https://www.materialui.co/materialIcons/action/settings_grey_192x192.png" width="30" height="30">';
+              //echo '</a>';
+            //echo '</li>';
             echo '<li class="nav-item navbar-text mr-3">';
               echo 'Hello, '.$_SESSION['first_name'];
             echo '</li>';

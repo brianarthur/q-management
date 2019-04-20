@@ -11,6 +11,9 @@
   elseif ($current == '/q-management/login/index.php') {
 
   }
+  elseif ($current == '/q-management/settings.php') {
+    echo '<script src="settings.js"></script>';
+  }
 ?>
 
 </body>
