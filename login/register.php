@@ -26,8 +26,8 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
     $_SESSION['message'] = "Email is already in use.";
   }
   else {
-    $sql = "INSERT INTO user (`firstName`, `lastName`, `email`, `password`, `hash`)
-      VALUES ('$first_name', '$last_name', '$email', '$password', '$hash')";
+    $sql = "INSERT INTO user (`firstName`, `lastName`, `email`, `password`, `hash`, `user_type`)
+      VALUES ('$first_name', '$last_name', '$email', '$password', '$hash', '2')";
 
     if($mysqli->query($sql)) {
       // get the id of newest user
@@ -41,6 +41,7 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
       $_SESSION['alert'] = "Confrimation email sent to '$email' (should make a page for this)";
       $_SESSION['schedule'] = 0;
       $_SESSION['timeout'] = time();
+      $_SESSION['admin'] = false;
 
       // Send registration confirmation link
       // TODO need to verify how server will send emails
