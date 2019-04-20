@@ -149,9 +149,15 @@ $(window).on('click touchstart', function (el) {
 	}
 });
 
+<<<<<<< HEAD
 $('#save_schedule').click(function () {
+=======
+$('#save_schedule').click(() => saveSchedule());
+
+async function saveSchedule() {
+>>>>>>> c29dc3cf8a21af6254807ebde398f2b5f45af0f3
 	$("#save_alert").remove();
-	var schedule = getScheduleValues();
+	var schedule = await getScheduleValues();
 	$.ajax({
 		url: "save_schedule.php",
 		type: "POST",
@@ -165,9 +171,14 @@ $('#save_schedule').click(function () {
 			}
 		}
 	});
-});
+}
 
+<<<<<<< HEAD
 $('#export_schedule').click(function () {
+=======
+$('#export_schedule').click(async function(){
+	await saveSchedule();
+>>>>>>> c29dc3cf8a21af6254807ebde398f2b5f45af0f3
 	window.location.href = "./export_schedule.php?click=export";
 });
 
