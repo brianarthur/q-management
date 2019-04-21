@@ -10,11 +10,11 @@ var drake = dragula([
 		accepts: function (el, target, source, siblings) {
 			return target.classList.contains('drag-item');
 		},
-		moves: function(el, container, handle) {
+		moves: function (el, container, handle) {
 			return container === document.getElementById('study-block');
 		}
 	}
-).on('drag', function(el) {
+).on('drag', function (el) {
 
 	if ($selected) {
 		$selected.removeClass("glow");
@@ -23,32 +23,32 @@ var drake = dragula([
 
 	el.classList.add('is-moving');
 	$(el).removeClass("glow");
-}).on('dragend', function(el) {
+}).on('dragend', function (el) {
 
 	// remove 'is-moving' class from element after dragging has stopped
 	$(el).removeClass("is-moving glow original-block");
-/*
-	// add the 'is-moved' class for 600ms then remove it
-	window.setTimeout(function() {
-		//el.classList.add('is-moved');
+	/*
+		// add the 'is-moved' class for 600ms then remove it
 		window.setTimeout(function() {
-			el.classList.remove('is-moved');
-		}, 600);
-	}, 100);
-*/
+			//el.classList.add('is-moved');
+			window.setTimeout(function() {
+				el.classList.remove('is-moved');
+			}, 600);
+		}, 100);
+	*/
 	//getScheduleValues();
-}).on('drop', function(el, target) {
+}).on('drop', function (el, target) {
 	if (target) {
 		var i;
 		var elements = target.children;
 		for (i = 0; i < elements.length; i++) {
-			if (!elements[i].classList.contains('gu-transit')){
+			if (!elements[i].classList.contains('gu-transit')) {
 				$(elements[i]).remove();
 			}
 		}
 		updateExtendClasses();
 	}
-}).on('over', function(el, container) {
+}).on('over', function (el, container) {
 	$(el).removeClass("glow");
 	if (container !== document.getElementById('study-block')) {
 		var i;
@@ -57,7 +57,7 @@ var drake = dragula([
 			$(elements[i]).hide();
 		}
 	}
-}).on('out', function(el, container) {
+}).on('out', function (el, container) {
 	if (container !== document.getElementById('study-block')) {
 		var i;
 		var elements = container.children;
@@ -93,6 +93,7 @@ function updateExtendClasses() {
 			}
 		}
 	}
+	updateScheduledTimes()
 }
 
 function removeExtendClasses() {
@@ -113,7 +114,7 @@ function getScheduleValues() {
 	for (id = 0; id <= 6; id++) {
 		dayValues = [];
 		dragBoxes = $("li .schedule-input", "#" + id);
-		for (i = 0; i<dragBoxes.length; i++){
+		for (i = 0; i < dragBoxes.length; i++) {
 			dayValues.push($(dragBoxes[i]).attr('data-schedule'));
 		}
 		values.push(dayValues);
@@ -127,8 +128,8 @@ updateExtendClasses();
 
 var $selected;
 
-$(window).on('click touchstart', function(el){
-	if($(el.target).hasClass("original-block")){
+$(window).on('click touchstart', function (el) {
+	if ($(el.target).hasClass("original-block")) {
 		if ($selected) {
 			$selected.removeClass("glow");
 			$selected = null;
@@ -148,14 +149,14 @@ $(window).on('click touchstart', function(el){
 	}
 });
 
-$('#save_schedule').click(function(){
+$('#save_schedule').click(function () {
 	$("#save_alert").remove();
 	var schedule = getScheduleValues();
 	$.ajax({
 		url: "save_schedule.php",
 		type: "POST",
-		data: {schedule : schedule},
-		success: function (data){
+		data: { schedule: schedule },
+		success: function (data) {
 			if (data.error) {
 				$('body').append(data.error.msg);
 			} else {
@@ -166,30 +167,30 @@ $('#save_schedule').click(function(){
 	});
 });
 
-$('#export_schedule').click(function(){
+$('#export_schedule').click(function () {
 	window.location.href = "./export_schedule.php?click=export";
 });
 
-$('#discard_changes').click(function(){
+$('#discard_changes').click(function () {
 	var confirmDiscard = confirm("Are you sure you want to discard all recent changes. There is no way to undo this action. Click cancel to go back and save your changes.");
-	if (confirmDiscard){
+	if (confirmDiscard) {
 		document.location.reload(true);
 	}
 });
 
-$("#new-activity").submit(function(e) {
+$("#new-activity").submit(function (e) {
 	e.preventDefault();
 	addActivity();
 });
 
-function addActivity(){
+function addActivity() {
 	var maxLength = 20;
 	var inputName = $("#activity-name").val();
 	if (inputName != '' && inputName.length < maxLength) {
 		$.ajax({
 			url: "add_class.php",
 			type: "POST",
-			data: {activityName : inputName},
+			data: { activityName: inputName },
 			success: function (data) {
 				if (data.error) {
 					$('body').append(data.error.msg);	//Need better error control
@@ -211,15 +212,15 @@ function addActivity(){
 // Mobile
 document.getElementById('study-block').addEventListener("touchmove", function (e) {
 	e.preventDefault();
-}, {passive: false});
+}, { passive: false });
 
 var dragStart;
 var dragStartElement;
 var dragEndElement;
 var dragList;
 
-$(".drag-item .schedule-input").on("mousedown", (e)=>dragStartSelection(e));
-$(".drag-item .schedule-input").on("mouseup", (e)=>dragEndSelection(e));
+$(".drag-item .schedule-input").on("mousedown", (e) => dragStartSelection(e));
+$(".drag-item .schedule-input").on("mouseup", (e) => dragEndSelection(e));
 
 function dragStartSelection(e) {
 	dragStartElement = $(e.target).parent();
@@ -238,10 +239,10 @@ function dragEndSelection(e) {
 			endIndex = dragEndElement.index();
 			for (var i = startIndex; i <= endIndex; i++) {
 				var element = $(dragList).children().eq(i);
-				if (element.hasClass('drag-item')){
+				if (element.hasClass('drag-item')) {
 					element.html($selected.clone());
-					element.on("mousedown", (e)=>dragStartSelection(e));
-					element.on("mouseup", (e)=>dragEndSelection(e));
+					element.on("mousedown", (e) => dragStartSelection(e));
+					element.on("mouseup", (e) => dragEndSelection(e));
 					element.children().removeClass("glow original-block");
 				}
 			}
@@ -249,6 +250,35 @@ function dragEndSelection(e) {
 		}
 	}
 }
+
+
+
+
+function updateScheduledTimes() {
+	var hoursPerCourse = [];
+	let hoursRequiredPerCourse = [5,3,3,2,5,4,2];
+	for (let index = 0; index < 16; index++) {
+		hoursPerCourse[index] = 0;
+
+	}
+	let schedVals = getScheduleValues();
+
+	schedVals.forEach(function (value) {
+		value.forEach(function (value2) {
+			hoursPerCourse[value2] ++;
+		});
+	});
+
+	for (let index = 9; index < 16; index++) {
+		if (hoursPerCourse[index] == null) hoursPerCourse[index] = 0;
+		let tempNum = hoursRequiredPerCourse[index-9] - hoursPerCourse[index];
+		if(tempNum < 0) tempNum = 0;
+		document.getElementById(`hourCount${index-9}`).innerHTML = tempNum;
+	}
+	
+}
+
+
 
 //document.getElementById('sidebar').addEventListener("touchmove", function () {
 	//document.getElementById('schedule').addEventListener("touchstart", function (e) {
