@@ -44,11 +44,6 @@
   }
   */
 
-  if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
-    echo "ADMIN";
-  } else {
-    echo "not admin user";
-  }
 ?>
 
 
@@ -66,7 +61,7 @@
                 echo '<h2> Select your schedule number: </h2>';
                 echo '<hr class="my-4">';
                 echo '<div class="row justify-content-md-center">';
-                if ($query = $pdo->prepare("SELECT * FROM `schedule` WHERE `type` = '0'")) {
+                if ($query = $pdo->prepare("SELECT * FROM `schedule` WHERE `type` = '0' ORDER BY `section_number` ASC")) {
                     $query->execute();
                     while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
                         echo '<a class="btn btn-primary btn-sm mr-4" href="./add_schedule.php?s='.$result['id'].'" role="button">Section '.$result['section_number'].'</a>';

@@ -149,13 +149,9 @@ $(window).on('click touchstart', function (el) {
 	}
 });
 
-<<<<<<< HEAD
-$('#save_schedule').click(function () {
-=======
 $('#save_schedule').click(() => saveSchedule());
 
 async function saveSchedule() {
->>>>>>> c29dc3cf8a21af6254807ebde398f2b5f45af0f3
 	$("#save_alert").remove();
 	var schedule = await getScheduleValues();
 	$.ajax({
@@ -173,12 +169,8 @@ async function saveSchedule() {
 	});
 }
 
-<<<<<<< HEAD
-$('#export_schedule').click(function () {
-=======
 $('#export_schedule').click(async function(){
 	await saveSchedule();
->>>>>>> c29dc3cf8a21af6254807ebde398f2b5f45af0f3
 	window.location.href = "./export_schedule.php?click=export";
 });
 
@@ -286,7 +278,7 @@ function updateScheduledTimes() {
 		if(tempNum < 0) tempNum = 0;
 		document.getElementById(`hourCount${index-9}`).innerHTML = tempNum;
 	}
-	
+
 }
 
 
