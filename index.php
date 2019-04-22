@@ -43,35 +43,40 @@
     unset($_SESSION['alert']);
   }
   */
+
 ?>
 
 
   <div id="content">
   <?php
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
-      if (isset($_SESSION['schedule']) && $_SESSION['schedule'] != 0) {
-        require("./show_schedule.php");
-      } else {
-        echo '<div class="container">';
-          echo '<div class="jumbotron">';
-            echo '<h2> Select your schedule number: </h2>';
-            echo '<hr class="my-4">';
-            echo '<div class="row justify-content-md-center">';
-            if ($query = $pdo->prepare("SELECT * FROM `schedule` WHERE `type` = '0'")) {
-                $query->execute();
-                while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<a class="btn btn-primary btn-sm mr-4" href="./add_schedule.php?s='.$result['id'].'" role="button">Section '.$result['section_number'].'</a>';
+        if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
+          require("./admin_page.php");
+        } else {
+          if (isset($_SESSION['schedule']) && $_SESSION['schedule'] != 0) {
+            require("./show_schedule.php");
+          } else {
+            echo '<div class="container">';
+              echo '<div class="jumbotron">';
+                echo '<h2> Select your schedule number: </h2>';
+                echo '<hr class="my-4">';
+                echo '<div class="row justify-content-md-center">';
+                if ($query = $pdo->prepare("SELECT * FROM `schedule` WHERE `type` = '0' ORDER BY `section_number` ASC")) {
+                    $query->execute();
+                    while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<a class="btn btn-primary btn-sm mr-4" href="./add_schedule.php?s='.$result['id'].'" role="button">Section '.$result['section_number'].'</a>';
+                    }
                 }
-            }
-            else {
-                $error = $query->errorInfo();
-                echo "My SQL Error: " . $error;
-                return false;
-            }
+                else {
+                    $error = $query->errorInfo();
+                    echo "My SQL Error: " . $error;
+                    return false;
+                }
+                echo '</div>';
+              echo '</div>';
             echo '</div>';
-          echo '</div>';
-        echo '</div>';
-      }
+          }
+        }
     } else {
       echo '<div class="container">';
         echo '<div class="jumbotron">';

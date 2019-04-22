@@ -9,6 +9,11 @@
 		$current = ($_SERVER['PHP_SELF']);
 		if ($current == '/q-management/index.php') {
 			echo '<link rel="stylesheet" type="text/css" href="index_css.css">';
+			echo '<title>Q Management</title>';
+		}
+		elseif ($current == '/q-management/settings.php') {
+			echo '<link rel="stylesheet" type="text/css" href="settings.css">';
+			echo '<title>Q Management</title>';
 		}
 		elseif ($current == '/q-management/login/index.php') {
 			echo '<link rel="stylesheet" type="text/css" href="signin_css.css">';
@@ -24,6 +29,9 @@
 	<?php
 		$current = ($_SERVER['PHP_SELF']);
 		if ($current == '/q-management/index.php') {
+			require('./template/nav.php');
+		}
+		elseif ($current == '/q-management/settings.php') {
 			require('./template/nav.php');
 		}
 		elseif ($current == '/q-management/login/index.php') {
