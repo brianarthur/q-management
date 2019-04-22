@@ -93,3 +93,16 @@ function saveSemesterDate (date, method) {
 		},
 	});
 }
+
+$('.update-hours').on('change', function () {
+	var value = $(this).val();
+	var class_id = $(this).parent().parent().data('class');
+	$.ajax({
+		url: "functions.php",
+		type: "POST",
+		data : {method: "updateHours", hours: value, id: class_id},
+		success : function(data) {
+			console.log(data);
+		},
+	});
+});

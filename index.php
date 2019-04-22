@@ -1,6 +1,7 @@
 <?php
 
-  require("./db.php");
+  require_once("./db.php");
+  require_once("./functions.php");
   session_start();
 
   // If user is not active log them out
@@ -14,8 +15,6 @@
     $_SESSION['timeout'] = time();
   }
 
-
-
   // Header file includes <head> items and css
   include("./template/header.php");
 ?>
@@ -28,25 +27,6 @@
 </div>
 
 
-
-<?php
-  /* TODO possibly? currently not working
-  if (isset($_SESSION['alert'])) {
-    echo '<div class="container">';
-      echo '<div class="alert alert-info alert-dismissible fade show" role="alert">';
-        echo $_SESSION['alert'];
-        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-          echo '<span aria-hidden="true">&times;</span>';
-        echo '</button>';
-      echo '</div>';
-    echo '</div>';
-    unset($_SESSION['alert']);
-  }
-  */
-
-?>
-
-
   <div id="content">
   <?php
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
@@ -56,25 +36,7 @@
           if (isset($_SESSION['schedule']) && $_SESSION['schedule'] != 0) {
             require("./show_schedule.php");
           } else {
-            echo '<div class="container">';
-              echo '<div class="jumbotron">';
-                echo '<h2> Select your schedule number: </h2>';
-                echo '<hr class="my-4">';
-                echo '<div class="row justify-content-md-center">';
-                if ($query = $pdo->prepare("SELECT * FROM `schedule` WHERE `type` = '0' ORDER BY `section_number` ASC")) {
-                    $query->execute();
-                    while ($result = $query->fetch(PDO::FETCH_ASSOC)) {
-                        echo '<a class="btn btn-primary btn-sm mr-4" href="./add_schedule.php?s='.$result['id'].'" role="button">Section '.$result['section_number'].'</a>';
-                    }
-                }
-                else {
-                    $error = $query->errorInfo();
-                    echo "My SQL Error: " . $error;
-                    return false;
-                }
-                echo '</div>';
-              echo '</div>';
-            echo '</div>';
+            printSelectSection();
           }
         }
     } else {

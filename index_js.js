@@ -15,7 +15,6 @@ var drake = dragula([
 		}
 	}
 ).on('drag', function (el) {
-
 	if ($selected) {
 		$selected.removeClass("glow");
 		$selected = null;
@@ -24,19 +23,7 @@ var drake = dragula([
 	el.classList.add('is-moving');
 	$(el).removeClass("glow");
 }).on('dragend', function (el) {
-
-	// remove 'is-moving' class from element after dragging has stopped
 	$(el).removeClass("is-moving glow original-block");
-	/*
-		// add the 'is-moved' class for 600ms then remove it
-		window.setTimeout(function() {
-			//el.classList.add('is-moved');
-			window.setTimeout(function() {
-				el.classList.remove('is-moved');
-			}, 600);
-		}, 100);
-	*/
-	//getScheduleValues();
 }).on('drop', function (el, target) {
 	if (target) {
 		var i;
@@ -120,11 +107,8 @@ function getScheduleValues() {
 		values.push(dayValues);
 		dayValues = [];
 	}
-	return values;	//ABLE TO SAVE THESE VALUES IN DATABASE
+	return values;
 }
-
-//getScheduleValues();
-updateExtendClasses();
 
 var $selected;
 
@@ -175,9 +159,23 @@ $('#export_schedule').click(async function(){
 });
 
 $('#discard_changes').click(function () {
-	var confirmDiscard = confirm("Are you sure you want to discard all recent changes. There is no way to undo this action. Click cancel to go back and save your changes.");
+	var confirmDiscard = confirm("Are you sure you want to discard all recent changes? There is no way to undo this action. Click cancel to go back and save your changes.");
 	if (confirmDiscard) {
 		document.location.reload(true);
+	}
+});
+
+$('#change_section').click(function () {
+	var confirmDiscard = confirm("Are you sure you want to change sections? Completing this action will delete your current schedule. There is no way to undo this action. Click cancel to go back.");
+	if (confirmDiscard) {
+		$.ajax({
+			url: "functions.php",
+			type: "POST",
+			data : {method: "changeSections"},
+			success : function(data) {
+				document.location.reload(true);
+			},
+		});
 	}
 });
 
@@ -196,7 +194,7 @@ function addActivity() {
 			data: { activityName: inputName },
 			success: function (data) {
 				if (data.error) {
-					$('body').append(data.error.msg);	//Need better error control
+					$('body').append(data.error.msg);
 				} else {
 					var element = "<div class='schedule-input original-block' style='background-color: #1a5dc9" + data.class.color + ";' data-schedule=" + data.class.id + ">" + data.class.name + "</div>";
 					$('#study-block').append(element);
@@ -254,37 +252,36 @@ function dragEndSelection(e) {
 	}
 }
 
-
-
+// RECOMMENDED HOURS
+var hoursRequired = {}
+$(document).ready(function () {
+	var classHours = $('.hours-remaining');
+	for (let i = 0; i < classHours.length; i++) {
+		hoursRequired[$(classHours[i]).data('schedule')] = parseInt($(classHours[i]).text());
+	}
+	updateExtendClasses();
+});
 
 function updateScheduledTimes() {
-	var hoursPerCourse = [];
-	let hoursRequiredPerCourse = [5,3,3,2,5,4,2];
-	for (let index = 0; index < 16; index++) {
-		hoursPerCourse[index] = 0;
-
-	}
+	var hoursPerCourse = {};
 	let schedVals = getScheduleValues();
-
 	schedVals.forEach(function (value) {
 		value.forEach(function (value2) {
-			hoursPerCourse[value2] ++;
+			if (hoursPerCourse[value2]) {
+				hoursPerCourse[value2] += 1;
+			} else {
+				hoursPerCourse[value2] = 1;
+			}
 		});
 	});
 
-	for (let index = 9; index < 16; index++) {
-		if (hoursPerCourse[index] == null) hoursPerCourse[index] = 0;
-		let tempNum = hoursRequiredPerCourse[index-9] - hoursPerCourse[index];
-		if(tempNum < 0) tempNum = 0;
-		document.getElementById(`hourCount${index-9}`).innerHTML = tempNum;
+	for (let key in hoursRequired) {
+		if (hoursPerCourse[key]) {
+			let tempNum = hoursRequired[key] - hoursPerCourse[key];
+			if(tempNum < 0) tempNum = 0;
+			$(`.hours-remaining[data-schedule="${key}"]`).html(tempNum);
+		} else {
+			$(`.hours-remaining[data-schedule="${key}"]`).html(hoursRequired[key]);
+		}
 	}
-
 }
-
-
-
-//document.getElementById('sidebar').addEventListener("touchmove", function () {
-	//document.getElementById('schedule').addEventListener("touchstart", function (e) {
-		//e.preventDefault();
-	//}, {passive: false});
-//}, {passive: false});

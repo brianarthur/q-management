@@ -1,5 +1,6 @@
 <?php
 require_once('./db.php');
+session_start();
 
 if(!empty($_POST['method'])) {
   if ($_POST['method'] == "printSchedule") {
@@ -14,6 +15,23 @@ if(!empty($_POST['method'])) {
     $config[$_POST['method']] = date('Ymd', $date);
     file_put_contents("config.json", json_encode($config));
   }
+  elseif ($_POST['method'] == "updateHours") {
+    global $mysqli;
+    $id = $_POST['id'];
+    $hours = $_POST['hours'];
+    if ($hours == 0) $hours = 'NULL';
+
+    $mysqli->query("UPDATE `class` SET `recommended_hours`=$hours WHERE `id` = '$id'") or die($mysqli->error);
+  }
+  elseif ($_POST['method'] == "changeSections") {
+    global $mysqli;
+    $schedule_id = $_SESSION['schedule'];
+    $user_id = $_SESSION['id'];
+
+    $mysqli->query("DELETE FROM `schedule` WHERE `id` = '$schedule_id'") or die($mysqli->error);
+    $mysqli->query("UPDATE `user` SET `schedule_id` = '0' WHERE `id` = '$user_id'") or die($mysqli->error);
+    $_SESSION['schedule'] = 0;
+  }
 }
 
 function getClasses($user_id) {
@@ -27,6 +45,7 @@ function getClasses($user_id) {
           $class_list [$counter]['id'] = $result['id'];
           $class_list [$counter]['name'] = $result['name'];
           $class_list [$counter]['type'] = $result['type'];
+          $class_list [$counter]['hours'] = $result['recommended_hours'];
           $class_list [$counter]['color'] = $result['color'];
           $counter++;
       }
@@ -81,6 +100,7 @@ function getScheduleSections() {
 }
 
 function printSidebar($classes) {
+  global $constantColour;
   echo "<div id='sidebar' class='sidebar'>";
     echo "<div class='class-list'>";
       echo "<div class='sidebar-header'>";
@@ -108,20 +128,22 @@ function printSidebar($classes) {
         echo "<h3>Recommended Hours Remaining</h3>";
       echo "</div>";
       echo "<div id='statistics'>";
-        echo "<div class='schedule-input' style='opacity: 0;'></div>";
-        echo "<div class='schedule-input' ><p id='hourCount0'>0</p></div>";
-        echo "<div class='schedule-input' ><p id='hourCount1'>0</p></div>";
-        echo "<div class='schedule-input'><p id='hourCount2'>0</p></div>";
-        echo "<div class='schedule-input'><p id='hourCount3'>0</p></div>";
-        echo "<div class='schedule-input'><p id='hourCount4'>0</p></div>";
-        echo "<div class='schedule-input'><p id='hourCount5'>0</p></div>";
-        echo "<div class='schedule-input'><p id='hourCount6'>0</p></div>";
+        foreach ($classes as $class) {
+          if ($class['type'] == '1') {
+            if ($class['hours']) {
+              echo "<div class='schedule-input hours-remaining' data-schedule='".$class['id']."'>".$class['hours']."</div>";
+            } else {
+              echo "<div class='schedule-input' style='opacity: 0;'></div>";
+            }
+          }
+        }
       echo "</div>";
     echo "</div>";
   echo "</div>";
 }
 
 function printSchedule($schedule, $classes) {
+  global $constantColour;
   echo '<div class="drag-container">';
       echo '<ul class="drag-list">';
       	echo '<li class="drag-column header1">';
@@ -184,5 +206,20 @@ function printSchedule($schedule, $classes) {
         }
       echo '</ul>';
     echo '</div>';
+}
+
+function printSelectSection() {
+  $schedules = getScheduleSections();
+  echo '<div class="container">';
+    echo '<div class="jumbotron">';
+      echo '<h2> Select your schedule number: </h2>';
+      echo '<hr class="my-4">';
+      echo '<div class="row justify-content-md-center">';
+      foreach ($schedules as $schedule) {
+        echo '<a class="btn btn-primary btn-sm mr-4 mb-4" href="./add_schedule.php?s='.$schedule['id'].'" role="button">Section '.$schedule['section_number'].'</a>';
+      }
+      echo '</div>';
+    echo '</div>';
+  echo '</div>';
 }
 ?>
