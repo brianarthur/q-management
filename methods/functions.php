@@ -1,8 +1,8 @@
 <?php
-require_once('./db.php');
 session_start();
 
 if(!empty($_POST['method'])) {
+  require_once('../db/db.php');
   if ($_POST['method'] == "printSchedule") {
     $schedule = getSchedules($_POST['section']);
     $classes = getClasses(0);
@@ -10,10 +10,10 @@ if(!empty($_POST['method'])) {
   }
   elseif ($_POST['method'] == "startDate" || $_POST['method'] == "endDate") {
     $date = strtotime($_POST['date']);
-    $json = file_get_contents("config.json");
+    $json = file_get_contents("../config.json");
     $config = json_decode($json, true);
     $config[$_POST['method']] = date('Ymd', $date);
-    file_put_contents("config.json", json_encode($config));
+    file_put_contents("../config.json", json_encode($config));
   }
   elseif ($_POST['method'] == "updateHours") {
     global $mysqli;
@@ -31,6 +31,12 @@ if(!empty($_POST['method'])) {
     $mysqli->query("DELETE FROM `schedule` WHERE `id` = '$schedule_id'") or die($mysqli->error);
     $mysqli->query("UPDATE `user` SET `schedule_id` = '0' WHERE `id` = '$user_id'") or die($mysqli->error);
     $_SESSION['schedule'] = 0;
+  }
+  elseif ($_POST['method'] == "addClass") {
+    addClass($_POST['activityName'], $_SESSION['id']);
+  }
+  elseif ($_POST['method'] == "saveSchedule") {
+    saveSchedule($_POST['schedule'], $_SESSION['id']);
   }
 }
 
@@ -216,10 +222,62 @@ function printSelectSection() {
       echo '<hr class="my-4">';
       echo '<div class="row justify-content-md-center">';
       foreach ($schedules as $schedule) {
-        echo '<a class="btn btn-primary btn-sm mr-4 mb-4" href="./add_schedule.php?s='.$schedule['id'].'" role="button">Section '.$schedule['section_number'].'</a>';
+        echo '<a class="btn btn-primary btn-sm mr-4 mb-4" href="./methods/add_schedule.php?s='.$schedule['id'].'" role="button">Section '.$schedule['section_number'].'</a>';
       }
       echo '</div>';
     echo '</div>';
   echo '</div>';
 }
+
+function addClass($name, $user_id) {
+  global $mysqli;
+  $activity_name = $mysqli->escape_string($name);
+
+  header('Content-Type: application/json');
+  try {
+    $mysqli->query("INSERT INTO `class` (`name`, `type`, `user_id`, `color`) VALUES ('$activity_name', '1', '$user_id', '')") or die($mysqli->error);
+
+    // Get id of new class
+    $result = $mysqli->query("SELECT LAST_INSERT_ID(); ");
+    $result = $result->fetch_assoc();
+    $class_id = $result['LAST_INSERT_ID()'];
+    echo json_encode(array(
+      'class' => array(
+        'id' => $class_id,
+        'name' => $activity_name,
+        'color' => '',
+      ),
+    ));
+  } catch (Exception $e) {
+    echo json_encode(array(
+      'error' => array(
+        'msg' => $e->getMessage(),
+      ),
+    ));
+  }
+}
+
+function saveSchedule($schedule, $user_id) {
+  global $mysqli;
+
+  $schedule = json_encode($schedule);
+  try {
+    $result = $mysqli->query("SELECT `schedule_id` FROM `user` WHERE `id` = '$user_id'") or die($mysqli->error);
+    if ($result->num_rows == 1) {
+      $user = $result->fetch_assoc();
+      $schedule_id = $user['schedule_id'];
+      $mysqli->query("UPDATE `schedule` SET `schedule`='$schedule' WHERE id = '$schedule_id'") or die($mysqli->error);
+    } else {
+      throw new Exception('Error saving new schedule.');
+    }
+  } catch (Exception $e) {
+    header('Content-Type: application/json');
+    echo json_encode(array(
+      'error' => array(
+        'msg' => $e->getMessage(),
+      ),
+    ));
+  }
+}
+
 ?>

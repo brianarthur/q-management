@@ -1,5 +1,5 @@
 <?php
-  require('../db.php');
+  require('../db/db.php');
   session_start();
 
   // Make sure email and hash variables are set

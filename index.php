@@ -1,7 +1,7 @@
 <?php
 
-  require_once("./db.php");
-  require_once("./functions.php");
+  require_once("./db/db.php");
+  require_once("./methods/functions.php");
   session_start();
 
   // If user is not active log them out
@@ -31,10 +31,10 @@
   <?php
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
         if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
-          require("./admin_page.php");
+          require("./views/admin_page.php");
         } else {
           if (isset($_SESSION['schedule']) && $_SESSION['schedule'] != 0) {
-            require("./show_schedule.php");
+            require("./views/show_schedule.php");
           } else {
             printSelectSection();
           }

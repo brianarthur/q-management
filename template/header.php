@@ -8,7 +8,7 @@
 	<?php
 		$current = ($_SERVER['PHP_SELF']);
 		if ($current == '/q-management/index.php') {
-			echo '<link rel="stylesheet" type="text/css" href="index_css.css">';
+			echo '<link rel="stylesheet" type="text/css" href="./static/css/index.css">';
 			echo '<title>Q Management</title>';
 		}
 		elseif ($current == '/q-management/settings.php') {

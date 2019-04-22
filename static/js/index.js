@@ -139,9 +139,9 @@ async function saveSchedule() {
 	$("#save_alert").remove();
 	var schedule = await getScheduleValues();
 	$.ajax({
-		url: "save_schedule.php",
+		url: "./methods/functions.php",
 		type: "POST",
-		data: { schedule: schedule },
+		data: { method: "saveSchedule", schedule: schedule },
 		success: function (data) {
 			if (data.error) {
 				$('body').append(data.error.msg);
@@ -155,7 +155,7 @@ async function saveSchedule() {
 
 $('#export_schedule').click(async function(){
 	await saveSchedule();
-	window.location.href = "./export_schedule.php?click=export";
+	window.location.href = "./methods/export_schedule.php?click=export";
 });
 
 $('#discard_changes').click(function () {
@@ -169,7 +169,7 @@ $('#change_section').click(function () {
 	var confirmDiscard = confirm("Are you sure you want to change sections? Completing this action will delete your current schedule. There is no way to undo this action. Click cancel to go back.");
 	if (confirmDiscard) {
 		$.ajax({
-			url: "functions.php",
+			url: "./methods/functions.php",
 			type: "POST",
 			data : {method: "changeSections"},
 			success : function(data) {
@@ -189,9 +189,9 @@ function addActivity() {
 	var inputName = $("#activity-name").val();
 	if (inputName != '' && inputName.length < maxLength) {
 		$.ajax({
-			url: "add_class.php",
+			url: "./methods/functions.php",
 			type: "POST",
-			data: { activityName: inputName },
+			data: { method: "addClass", activityName: inputName },
 			success: function (data) {
 				if (data.error) {
 					$('body').append(data.error.msg);

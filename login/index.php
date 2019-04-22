@@ -1,5 +1,5 @@
 <?php
-  require("../db.php");
+  require("../db/db.php");
   session_start();
 
   // Header file includes <head> items and css
@@ -69,7 +69,7 @@
             }
           ?>
           <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus value="<? echo $_SESSION['email'];?>">
           <label for="inputPassword" class="sr-only">Password</label>
           <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
           <!--<div class="checkbox mb-3">

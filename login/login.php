@@ -5,6 +5,8 @@ if(isset($_POST['email']) && !empty($_POST['email']) AND
     isset($_POST['email']) && !empty($_POST['email'])
 ){
 
+  $_SESSION['email'] = $_POST['email'];
+
   $email = $mysqli->escape_string($_POST['email']);
   $result = $mysqli->query("SELECT * FROM user WHERE email = '$email'") or die($mysqli->error);
 

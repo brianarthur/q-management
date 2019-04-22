@@ -1,6 +1,6 @@
 <?php
 
-require('./db.php');
+require('../db/db.php');
 session_start();
 
 if (isset($_GET['s'])) {
@@ -25,10 +25,10 @@ if (isset($_GET['s'])) {
 
   // Update the schedule id for the user in the database
   $result = $mysqli->query("UPDATE `user` SET `schedule_id` = '$schedule_id' WHERE `user`.`id` = '$user_id'") or die($mysqli->error);
-  header("Location: index.php");
+  header("Location: ../index.php");
 } else {
   // Redirect to index page, didn't set the schedule id
-  header("Location: index.php");
+  header("Location: ../index.php");
 }
 
 

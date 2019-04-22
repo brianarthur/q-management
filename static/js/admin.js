@@ -1,5 +1,4 @@
 $('#upload_schedules').submit(function (e) {
-	console.log('hello');
 	e.preventDefault();
 	e.stopPropagation();
 	var formData = new FormData();
@@ -8,7 +7,7 @@ $('#upload_schedules').submit(function (e) {
 	}
 	$('#upload_message').html("");
 	$.ajax({
-		url: "schedule_import.php",
+		url: "./methods/schedule_import.php",
 		type: "POST",
 		data : formData,
 		processData: false,
@@ -30,7 +29,7 @@ $('#select-section').on('change', function () {
 	var section = $(this).children("option:selected").val();
 	$("#active_schedules").html("");
 	$.ajax({
-		url: "functions.php",
+		url: "./methods/functions.php",
 		type: "POST",
 		data : {method: "printSchedule", section: section},
 		success : function(data) {
@@ -85,7 +84,7 @@ function checkDates (startDate, endDate) {
 
 function saveSemesterDate (date, method) {
 	$.ajax({
-		url: "functions.php",
+		url: "./methods/functions.php",
 		type: "POST",
 		data : {method: method, date: date},
 		success : function(data) {
@@ -98,7 +97,7 @@ $('.update-hours').on('change', function () {
 	var value = $(this).val();
 	var class_id = $(this).parent().parent().data('class');
 	$.ajax({
-		url: "functions.php",
+		url: "./methods/functions.php",
 		type: "POST",
 		data : {method: "updateHours", hours: value, id: class_id},
 		success : function(data) {

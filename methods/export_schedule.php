@@ -3,11 +3,11 @@
 if ($_GET['click'] == 'export') {
     header('Content-type: text/calendar');
     header('Content-Disposition: inline; filename=calendar.ics');
-    require('./db.php');
+    require('../db/db.php');
     session_start();
 
     //TODO remove hardcoded values
-    $config = json_decode(file_get_contents("config.json"), true);
+    $config = json_decode(file_get_contents("../config.json"), true);
     $start_date = $config['startDate'];
     $end_date = $config['endDate'];
     $start_hour = 7;
