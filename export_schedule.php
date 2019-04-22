@@ -7,8 +7,9 @@ if ($_GET['click'] == 'export') {
     session_start();
 
     //TODO remove hardcoded values
-    $start_date = "20190414";
-    $end_date = "20191225";
+    $config = json_decode(file_get_contents("config.json"), true);
+    $start_date = $config['startDate'];
+    $end_date = $config['endDate'];
     $start_hour = 7;
     $start_min = 30;
     $user_id = $_SESSION['id'];
@@ -84,7 +85,7 @@ if ($_GET['click'] == 'export') {
                     date_modify($date, '+1 hour'); // add time interval but maintain datetime object
                     echo "\nDTEND;TZID=America/Toronto:" . date_format($date, "Ymd") . "T" . date_format($date, "His");
                     date_modify($date, '-1 hour');
-                    echo "\nDTSTAMP:" . date("Ymd") . "T" . date("His") . "Z";  
+                    echo "\nDTSTAMP:" . date("Ymd") . "T" . date("His") . "Z";
                     echo "\nUID:" . date("YmdHis") . rand() . "@q-management.com";
                     echo "\nRRULE:FREQ=WEEKLY;UNTIL=" . $end_date . "T000000Z";
                     //echo "\nDESCRIPTION:" . $activity_list[$activity_id]['Teacher']; //TODO add teacher and class location to db
@@ -102,7 +103,7 @@ if ($_GET['click'] == 'export') {
         //file footer
         echo "\nEND:VCALENDAR";
 
-      
+
 
     } catch (Exception $e) {
         echo('error in main');
