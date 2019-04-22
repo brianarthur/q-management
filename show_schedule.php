@@ -1,5 +1,4 @@
 <?php
-  include('./functions.php');
 
   $class_list = getClasses($_SESSION['id']);
   $schedule = getSchedules($_SESSION['schedule']);
@@ -9,7 +8,7 @@
 
 
 <div class="schedule-content">
-  
+
 <? printSidebar($class_list); ?>
 
   <div id="schedule">
@@ -29,6 +28,7 @@
         <button id="save_schedule" class="btn btn-outline-primary">SAVE</button>
         <button id="export_schedule" class="btn btn-outline-info">EXPORT</button>
         <button id="discard_changes" class="btn btn-outline-danger">DISCARD</button>
+        <button id="change_section" class="btn btn-outline-danger">CHANGE SECTION</button>
       </div>
     </div>
 

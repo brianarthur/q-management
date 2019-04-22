@@ -1,7 +1,3 @@
-<?php
-  include('./functions.php');
-?>
-
 <div class="title">
   <div class="container">
     <h1> Settings </h1>
@@ -15,7 +11,7 @@
       <div class="nav flex-column nav-pills" id="settingsTabs" role="tablist" aria-orientation="vertical">
         <a class="nav-link active" id="upload-schedules-tab" data-toggle="pill" href="#upload-schedules" role="tab" aria-controls="upload-schedules" aria-selected="true">Upload Schedules</a>
         <a class="nav-link" id="views-schedules-tab" data-toggle="pill" href="#views-schedules" role="tab" aria-controls="views-schedules" aria-selected="false">View Schedules</a>
-        <!--<a class="nav-link" id="reset-password-tab" data-toggle="pill" href="#reset-password" role="tab" aria-controls="reset-password" aria-selected="false">Reset Password</a>-->
+        <a class="nav-link" id="classes-page-tab" data-toggle="pill" href="#classes-page" role="tab" aria-controls="classes-page" aria-selected="false">View Classes</a>
       </div>
     </div>
     <div class="col-10">
@@ -94,9 +90,30 @@
             echo "</div>"
           ?>
         </div>
-        <!--<div class="tab-pane fade" id="reset-password" role="tabpanel" aria-labelledby="reset-password-tab">
-          Reset Password
-        </div>-->
+        <div class="tab-pane fade" id="classes-page" role="tabpanel" aria-labelledby="classes-page-tab">
+          <h2>View Classes</h2>
+          <table class="table mb-4">
+            <thead class="thead-light">
+              <tr>
+                <th>Class Name</th>
+                <th>Recommended Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                $classes = getClasses(0);
+                foreach ($classes as $class) {
+                  if ($class['type'] == 1 && $class['id'] != 1) {
+                    echo "<tr data-class='".$class['id']."'>";
+                      echo "<td>".$class['name']."</td>";
+                      echo "<td><input class='update-hours form-control' type='number' min='0' max='24' value='".$class['hours']."'></td>";
+                    echo "</tr>";
+                  }
+                }
+              ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
