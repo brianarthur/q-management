@@ -9,7 +9,7 @@
 
 <div class="schedule-content">
 
-<? printSidebar($class_list); ?>
+<?php printSidebar($class_list); ?>
 
   <div id="schedule">
     <div id='schedule-menu' class="mb-4">
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-<? printSchedule($schedule, $class_list); ?>
+<?php printSchedule($schedule, $class_list); ?>
 
   </div>
 </div>
